@@ -1,0 +1,58 @@
+#include <sys/types.h>                                                              
+#include <sys/stat.h>                                                                    
+#include <fcntl.h>                                                                       
+#include <unistd.h>                                                                      
+#include <stdio.h>                                                                     
+#define NAME "aaa.fifo""
+int main()
+{                                                                             
+     int fd, result, i;
+	size_t size;   
+	char resstring[14];   
+	FILE* name;
+	//char name[]="aaa.fifo"; 
+	
+   	(void)umask(0);                                                                       
+   	mknod(name, S_IFIFO | 0666, 0);                             
+   
+    	result = fork();
+		                                                                                     
+	if (result > 0) 
+	{
+		//fd = open(name, O_WRONLY);
+		name = fopen(NAME, "w");
+		for (i = 0; i < 5; i++)
+		{             
+			fprintf(name, "Hello, world!:");
+			fprintf(name, "%d \n",i+1);
+	      		//write(fd, "Hello, world!: ", 14);  
+			    //write(fd, , 1);  
+			
+		} 
+
+	      	//close(fd); 
+			fclose (name);
+	      	printf("Parent exit\n");
+	}                                                          
+	else 
+	{
+		//fd = open(name, O_RDONLY);
+		name = fopen(NAME, "r");
+		int rc;	
+		
+		while ((rc = fgetc (name)) != EOF)
+        putchar (rc);
+ 		//for (i = 0; i < 5; i++) 
+		//{               
+	   //   		read(fd, resstring, 14);    
+		//	printf("%s ", resstring);
+		//	printf("%d\n ", i+1);
+		}                                                                                
+	
+	     	
+	      	//close(fd);  
+	    fclose (name);
+	}  
+                                                                                    
+    return 0;                                                                                 
+}
